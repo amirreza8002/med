@@ -2,3 +2,5 @@ django
 django-allauth
 pre-commit
 psycopg[binary]
+django-crispy-forms
+crispy-bootstrap5

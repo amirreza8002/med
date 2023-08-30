@@ -9,9 +9,10 @@ class CustomUser(AbstractUser):
     first_name = None
     last_name = None
     email = models.EmailField(_("email address"), unique=True)
+    age = models.PositiveSmallIntegerField()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS = ["username", "age"]
 
     def get_absolute_url(self):
         return reverse("users:user_detail", kwargs={"username": self.username})

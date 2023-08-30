@@ -1,0 +1,30 @@
+{% extends '_base.html' %}
+
+{% block title %}profile{% endblock %}
+
+{% block content %}
+	<h2>your profile</h2>
+
+  <p>{{ conditions.patient.username }}</p>
+  <p>{{ conditions.patient.age }}</p>
+
+  {% for condition in conditions %}
+  	<p>{{ condition.condition }}</p>
+
+    {% if condition.severity %}
+      <p>{{ condition.severity }}</p>
+    {% endif %}
+
+    {% if condition.medicines %}
+      {{ condition.medicines.all }}
+    {% endif %}
+
+    {% if condition.descriptions %}
+      {% for des in condition.descriptions.all %}
+      	<p>{{ des.description }}</p>
+      {% endfor %}
+    {% endif %}
+
+  {% endfor %}
+
+{% endblock %}

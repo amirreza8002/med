@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}New condition{% endblock %}
+
+{% block content %}
+	<h2>New condition</h2>
+
+  <form method="post" action="">{% csrf_token %}
+    {{ form|crispy }}
+
+    {{ descriptions|crispy }}
+    <button class="btn btn-success ml-2" type="submit">Save</button>
+  </form>
+{% endblock %}
