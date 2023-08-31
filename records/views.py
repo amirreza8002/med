@@ -23,18 +23,11 @@ class ConditionCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.patient = self.request.user
-        if form.is_valid():
-            form.save()
-        else:
-            self.form_invalid(form)
+        form.save()
 
         self.ConditionFormSet = inlineformset_factory(Condition, InLineDescription, fields=("description",), extra=3)
         formset = self.ConditionFormSet(self.request.POST, self.request.FILES, instance=form.instance)
-
-        if formset.is_valid():
-            formset.save()
-        else:
-            self.form_invalid(formset)
+        formset.save()
 
         return super().form_valid(form)
 
