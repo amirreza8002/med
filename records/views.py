@@ -16,28 +16,22 @@ class ConditionCreateView(CreateView):
     # success_url = reverse_lazy("records:condition_detail", args=[str(self.id)])
 
     def get_context_data(self, **kwargs):
-        ConditionFormSet = inlineformset_factory(Condition, InLineDescription, fields=("description",), extra=3, can_delete=False)
+        ConditionFormSet = inlineformset_factory(Condition, InLineDescription, fields=("description",), extra=3)
         context = super().get_context_data(**kwargs)
 
         context["descriptions"] = ConditionFormSet()
         return context
 
     # def post(self, request, *args, **kwargs):
-    #
-    #     self.ConditionFormSet = inlineformset_factory(Condition, InLineDescription, fields=("description",), extra=3, can_delete=False)
-    #     formset = self.ConditionFormSet(self.request.POST, self.request.FILES)
-    #     if formset.is_valid():
-    #         print(formset.cleaned_data)
-    #         formset.save()
-    #         return super().post(request, *args, **kwargs)
+
 
     def form_valid(self, form):
         form.instance.patient = self.request.user
-        self.ConditionFormSet = inlineformset_factory(Condition, InLineDescription, fields=("description",), extra=3,
-                                                      can_delete=False)
-        formset = self.ConditionFormSet(self.request.POST, self.request.FILES)
-        if formset.is_valid():
+        form.save()
+        self.ConditionFormSet = inlineformset_factory(Condition, InLineDescription, fields=("description",), extra=3)
+        formset = self.ConditionFormSet(self.request.POST, self.request.FILES, instance=form.instance)
 
+        if formset.is_valid():
             print(formset.cleaned_data)
             formset.save()
 

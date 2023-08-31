@@ -15,9 +15,9 @@
     {{ condition.medicines.all }}
   {% endif %}
 
-  {% if condition.descriptions %}
+{#  {% if condition.descriptions %}#}
       {% for des in condition.descriptions.all %}
       	<p>{{ des.description }}</p>
       {% endfor %}
-  {% endif %}
+{#  {% endif %}#}
 {% endblock %}
