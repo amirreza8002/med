@@ -22,9 +22,6 @@ class ConditionCreateView(CreateView):
         context["descriptions"] = ConditionFormSet()
         return context
 
-    # def post(self, request, *args, **kwargs):
-
-
     def form_valid(self, form):
         form.instance.patient = self.request.user
         form.save()
@@ -32,7 +29,6 @@ class ConditionCreateView(CreateView):
         formset = self.ConditionFormSet(self.request.POST, self.request.FILES, instance=form.instance)
 
         if formset.is_valid():
-            print(formset.cleaned_data)
             formset.save()
 
         return super().form_valid(form)
