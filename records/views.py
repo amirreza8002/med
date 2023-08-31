@@ -13,7 +13,6 @@ class ConditionCreateView(CreateView):
     form_class = ConditionForm
     model = Condition
     template_name = "records/condition_create.html"
-    # success_url = reverse_lazy("records:condition_detail", args=[str(self.id)])
 
     def get_context_data(self, **kwargs):
         ConditionFormSet = inlineformset_factory(Condition, InLineDescription, fields=("description",), extra=3)
@@ -24,12 +23,18 @@ class ConditionCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.patient = self.request.user
-        form.save()
+        if form.is_valid():
+            form.save()
+        else:
+            self.form_invalid(form)
+
         self.ConditionFormSet = inlineformset_factory(Condition, InLineDescription, fields=("description",), extra=3)
         formset = self.ConditionFormSet(self.request.POST, self.request.FILES, instance=form.instance)
 
         if formset.is_valid():
             formset.save()
+        else:
+            self.form_invalid(formset)
 
         return super().form_valid(form)
 
