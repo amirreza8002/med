@@ -5,19 +5,26 @@
 {% block content %}
 	<h3>{{ condition.condition }}</h3>
 
-  <p>{{ condition.patient.username }}</p>
-  <p>{{ condition.condition }}</p>
   {% if condition.severity %}
-    <p>{{ condition.severity }}</p>
+    <p>severity: {{ condition.severity }}</p>
   {% endif %}
 
+  <p>Medication:</p>
   {% if condition.medicines.exists %}
     {{ condition.medicines.all }}
+  {% else %}
+    <p>No medication for this condition</p>
   {% endif %}
 
-{#  {% if condition.descriptions %}#}
-      {% for des in condition.descriptions.all %}
-      	<p>{{ des.description }}</p>
-      {% endfor %}
-{#  {% endif %}#}
+  {% if condition.descriptions %}
+    <p>Descriptions:</p>
+    {% for des in condition.descriptions.all %}
+      <p>{{ des.description }}</p>
+    {% endfor %}
+  {% endif %}
+
+  <p>
+    <a href="{% url 'condition_update' condition.pk %}">Edit</a> |
+    <a href="{% url 'condition_delete' condition.pk %}">Delete</a>
+  </p>
 {% endblock %}

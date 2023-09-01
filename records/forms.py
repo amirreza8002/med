@@ -1,6 +1,6 @@
-from django.forms import inlineformset_factory, ModelForm
+from django.forms import ModelForm
 
-from .models import Condition, InLineDescription
+from .models import Condition
 
 
 class ConditionForm(ModelForm):

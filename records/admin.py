@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from .forms import ConditionForm
 from .models import Condition, InLineDescription
 
 

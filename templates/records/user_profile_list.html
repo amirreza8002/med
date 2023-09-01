@@ -5,21 +5,25 @@
 {% block content %}
 	<h2>your profile</h2>
 
-  <p>{{ conditions.patient.username }}</p>
-  <p>{{ conditions.patient.age }}</p>
+  <p>name: {{ conditions.patient.username }}</p>
+  <p>age: {{ conditions.patient.age }}</p>
 
   {% for condition in conditions %}
-  	<p>{{ condition.condition }}</p>
+  	<p><a href="{{ condition.get_absolute_url }}">{{ condition.condition }}</a></p>
 
     {% if condition.severity %}
-      <p>{{ condition.severity }}</p>
+      <p>severity: {{ condition.severity }}</p>
     {% endif %}
 
+    <p>Medication:</p>
     {% if condition.medicines.exists %}
       {{ condition.medicines.all }}
+    {% else %}
+      <p>No medication for this condition</p>
     {% endif %}
 
     {% if condition.descriptions %}
+      <p>Descriptions:</p>
       {% for des in condition.descriptions.all %}
       	<p>{{ des.description }}</p>
       {% endfor %}
