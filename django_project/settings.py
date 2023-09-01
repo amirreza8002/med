@@ -40,12 +40,16 @@ INSTALLED_APPS = [
     # local
     "records.apps.RecordsConfig",
     "accounts.apps.AccountsConfig",
+    "pages.apps.PagesConfig",
     # allauth
     "allauth",
     "allauth.account",
+    "allauth.socialaccount",
     # crispy
     "crispy_forms",
     "crispy_bootstrap5",
+    # toolbar
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -56,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware"
 ]
 
 ROOT_URLCONF = "django_project.urls"
@@ -165,3 +170,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+
+# debug toolbar setting
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

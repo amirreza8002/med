@@ -15,7 +15,7 @@
       <p>{{ condition.severity }}</p>
     {% endif %}
 
-    {% if condition.medicines %}
+    {% if condition.medicines.exists %}
       {{ condition.medicines.all }}
     {% endif %}
 
@@ -25,6 +25,7 @@
       {% endfor %}
     {% endif %}
 
+    <hr>
   {% endfor %}
 
 {% endblock %}

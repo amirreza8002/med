@@ -21,6 +21,13 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("records.urls", namespace="records")),
-    path("accounts/", include("accounts.urls", namespace="users")),
+    path("", include("pages.urls")),
+    path("records/", include("records.urls",)),
+    path("accounts/", include("accounts.urls",)),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+if settings.DEBUG:
+    urlpatterns += [
+        path("__debug__/", include("debug_toolbar.urls")),
+    ]
