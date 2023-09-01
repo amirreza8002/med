@@ -19,3 +19,16 @@ class CustomUserAdmin(UserAdmin):
     )
 
     search_fields = ["name"]
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().fieldsets + (
+            (
+                "info",
+                {
+                    "fields": [
+                        "age",
+                    ]
+                },
+            ),
+        )
+        return fieldsets
