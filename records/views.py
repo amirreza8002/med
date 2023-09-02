@@ -1,7 +1,7 @@
 from django.forms import inlineformset_factory
-from django.http import HttpResponseRedirect, Http404
-from django.utils.translation import gettext as _
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils.translation import gettext as _
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
@@ -97,14 +97,14 @@ class ConditioDetailView(DetailView):
 #             medicines__medicine=slug))
 #         return Condition.objects.filter(pk=self.kwargs.get(self.pk_url_kwarg)).filter(medicines__medicine=slug).values_list("medicines", flat=True).values("medicines")
 
-    # def form_valid(self, form):
-    #     pk = self.kwargs.get(self.pk_url_kwarg)
-    #     import psycopg
-    #     with psycopg.connect("dbname=med user=postgres password=ar138050") as conn:
-    #         with conn.cursor() as cur:
-    #             cur.execute("""
-    #                 SELECT * FROM public.records_condition_medicines WHERE condition_id = %s and medicine_id = %s
-    #             """, (pk, ))
+# def form_valid(self, form):
+#     pk = self.kwargs.get(self.pk_url_kwarg)
+#     import psycopg
+#     with psycopg.connect("dbname=med user=postgres password=ar138050") as conn:
+#         with conn.cursor() as cur:
+#             cur.execute("""
+#                 SELECT * FROM public.records_condition_medicines WHERE condition_id = %s and medicine_id = %s
+#             """, (pk, ))
 
 
 class MedicineDelete(DeleteView):
@@ -115,8 +115,16 @@ class MedicineDelete(DeleteView):
     def form_valid(self, form):
         con_pk = self.kwargs.get("con_pk")
         slug = self.kwargs.get("medicine")
-        print(Medicine.objects.filter(medicine=slug).filter(conditions__id=con_pk).values())
-        med_pk = Medicine.objects.filter(medicine=slug).filter(conditions__id=con_pk).values()[0]["id"]
+        print(
+            Medicine.objects.filter(medicine=slug)
+            .filter(conditions__id=con_pk)
+            .values()
+        )
+        med_pk = (
+            Medicine.objects.filter(medicine=slug)
+            .filter(conditions__id=con_pk)
+            .values()[0]["id"]
+        )
 
         self.delete_func(con_pk, med_pk)
 
@@ -147,11 +155,15 @@ class MedicineDelete(DeleteView):
         return obj
 
     def delete_func(self, con_pk, med_pk):
-        import psycopg
-        with psycopg.connect("dbname=med user=postgres password=ar138050") as conn:
-            with conn.cursor() as cur:
-                cur.execute("DELETE * FROM records_condition_medicines WHERE condition_id=%s AND medicine_id=%s", (con_pk, med_pk))
-                conn.commit()
+        from django.db import connection
+
+        with connection.cursor() as cur:  # ("dbname=med user=postgres password=ar138050") as conn:
+            cur.execute(
+                "DELETE "
+                "FROM public.records_condition_medicines "
+                "WHERE condition_id=%s AND medicine_id=%s",
+                (con_pk, med_pk),
+            )
         return True
 
 

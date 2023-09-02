@@ -1,8 +1,8 @@
 from django.urls import path
 
 from .views import (ConditioDetailView, ConditionCreateView,
-                    ConditionDeleteView, ConditionUpdateView,
-                    UserProfileListView, MedicineDelete)
+                    ConditionDeleteView, ConditionUpdateView, MedicineDelete,
+                    UserProfileListView)
 
 # app_name = "records"
 
@@ -24,5 +24,9 @@ urlpatterns = [
         ConditionUpdateView.as_view(),
         name="condition_update",
     ),
-    path("condition/detail/<int:con_pk>/delete/<slug:medicine>/", MedicineDelete.as_view(), name="medicine_delete")
+    path(
+        "condition/detail/<int:con_pk>/delete/<slug:medicine>/",
+        MedicineDelete.as_view(),
+        name="medicine_delete",
+    ),
 ]
