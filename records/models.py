@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Medicine(models.Model):
     medicine = models.CharField(max_length=150)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.medicine

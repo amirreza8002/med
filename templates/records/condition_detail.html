@@ -11,7 +11,9 @@
 
   <p>Medication:</p>
   {% if condition.medicines.exists %}
-    {{ condition.medicines.all }}
+    {% for med in condition.medicines.all %}
+    	<p>{{ med }} <small><a href="{% url 'medicine_delete' condition.pk med %}">Delete this medicine?</a></small></p>
+    {% endfor %}
   {% else %}
     <p>No medication for this condition</p>
   {% endif %}

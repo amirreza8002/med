@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import (ConditioDetailView, ConditionCreateView,
                     ConditionDeleteView, ConditionUpdateView,
-                    UserProfileListView)
+                    UserProfileListView, MedicineDelete)
 
 # app_name = "records"
 
@@ -24,4 +24,5 @@ urlpatterns = [
         ConditionUpdateView.as_view(),
         name="condition_update",
     ),
+    path("condition/detail/<int:con_pk>/delete/<slug:medicine>/", MedicineDelete.as_view(), name="medicine_delete")
 ]
