@@ -172,5 +172,11 @@ class UserProfileListView(ListView):
     template_name = "records/user_profile_list.html"
     context_object_name = "conditions"
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context["patient"] = self.request.user
+
+        return context
+
     def get_queryset(self):
         return Condition.objects.filter(patient=self.request.user)

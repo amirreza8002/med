@@ -3,6 +3,7 @@
 {% block title %}{{ condition.condition }}{% endblock %}
 
 {% block content %}
+  <div class="condition-detail">
 	<h3>{{ condition.condition }}</h3>
 
   {% if condition.severity %}
@@ -17,14 +18,15 @@
   {% else %}
     <p>No medication for this condition</p>
   {% endif %}
-
+  <div>
   {% if condition.descriptions %}
     <p>Descriptions:</p>
     {% for des in condition.descriptions.all %}
       <p>{{ des.description }}</p>
     {% endfor %}
   {% endif %}
-
+  </div>
+  </div>
   <p>
     <a href="{% url 'condition_update' condition.pk %}">Edit</a> |
     <a href="{% url 'condition_delete' condition.pk %}">Delete</a>

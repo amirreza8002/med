@@ -4,20 +4,28 @@
 
 {% block content %}
 	<h2>your profile</h2>
+    <div class="article-entry">
+      <span class="text-muted" style="text-decoration: none">name: {{ patient.username }}</span> &middot;
+      <span class="text-muted">age: {{ patient.age }}</span>
+    </div>
 
-  <p>name: {{ conditions.patient.username }}</p>
-  <p>age: {{ conditions.patient.age }}</p>
+
 
   {% for condition in conditions %}
-  	<p><a href="{{ condition.get_absolute_url }}">{{ condition.condition }}</a></p>
-
-    {% if condition.severity %}
-      <p>severity: {{ condition.severity }}</p>
-    {% endif %}
+    <div class="card">
+      <div class="card-header">
+  	  <p class="font-weight-bold"><a class="link-dark" style="text-decoration: none" href="{{ condition.get_absolute_url }}">{{ condition.condition }}</a></p>
+      </div>
+      <div class="card-body">
+      {% if condition.severity %}
+        <p>severity: {{ condition.severity }}</p>
+      {% endif %}
 
     <p>Medication:</p>
     {% if condition.medicines.exists %}
-      {{ condition.medicines.all }}
+      <p>{% for med in condition.medicines.all %}
+    	  {{ med }}{% if not forloop.last %},{% endif %}
+      {% endfor %}</p>
     {% else %}
       <p>No medication for this condition</p>
     {% endif %}
@@ -28,8 +36,11 @@
       	<p>{{ des.description }}</p>
       {% endfor %}
     {% endif %}
-
-    <hr>
+    </div>
+    <div class="card-footer text-center text-muted">
+      <a class="link-dark" href="{% url 'condition_update' condition.pk %}">Edit</a> | <a class="link-dark" href="{% url 'condition_delete' condition.pk %}">Delete</a>
+    </div>
+    </div>
   {% endfor %}
 
 {% endblock %}
