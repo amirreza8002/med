@@ -5,3 +5,4 @@ psycopg[binary]
 django-crispy-forms
 crispy-bootstrap5
 django-debug-toolbar
+black

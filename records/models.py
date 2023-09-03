@@ -11,6 +11,9 @@ class Medicine(models.Model):
     def __str__(self):
         return self.medicine
 
+    def __repr__(self):
+        return f"Medicine(medicine={self.medicine}, description={self.description if self.description else None})"
+
 
 class Condition(models.Model):
     patient = models.ForeignKey(
@@ -25,6 +28,12 @@ class Condition(models.Model):
     def __str__(self):
         return self.condition
 
+    def __repr__(self):
+        return (f"Condition(condition={self.condition}, "
+                f"severity={self.severity if self.severity else None}, "
+                f"medicine={self.medicines if self.medicines else None}, "
+                f"descriptions={[desc for desc in self.descriptions.all()] if self.descriptions else None})")
+
     def get_absolute_url(self):
         return reverse("condition_detail", args=[str(self.id)])
 
@@ -34,3 +43,6 @@ class InLineDescription(models.Model):
     condition = models.ForeignKey(
         Condition, on_delete=models.CASCADE, related_name="descriptions"
     )
+
+    def __repr__(self):
+        return f"InLineDescription(description={self.description}, condition={self.condition})"
