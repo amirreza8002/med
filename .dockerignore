@@ -1,0 +1,7 @@
+.venv
+.git
+.gitignore
+.idea
+.ruff_cache
+.pre-commit-config
+pyproject

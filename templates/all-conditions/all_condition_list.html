@@ -1,0 +1,16 @@
+{% extends '_base.html' %}
+
+{% block title %}conditions{% endblock %}
+
+{% block content %}
+	<h2>conditions</h2>
+
+  {% for condition in condition_list %}
+    <div class="card">
+      <div class="card-header">
+  	  <p class="font-weight-bold"><a class="link-dark" style="text-decoration: none" href="#">{{ condition }}</a></p>
+      </div>
+    </div>
+  {% endfor %}
+
+{% endblock %}

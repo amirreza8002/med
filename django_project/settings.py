@@ -165,13 +165,20 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-ACCOUNT_SIGNUP_PASSWORD_TWICE = False
-ACCOUNT_USERNAME_REQUIRED = False
+
+# ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+
+ACCOUNT_FORMS = {'signup': 'accounts.forms.CustomSignUpForm'}
 
 # debug toolbar setting
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+# email service
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+DEFAULT_FROM_EMAIL = "admin@bookstore.com"

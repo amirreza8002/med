@@ -16,7 +16,7 @@ class ConditionCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         ConditionFormSet = inlineformset_factory(
-            Condition, InLineDescription, fields=("description",), extra=3
+            Condition, InLineDescription, fields=("description",), extra=1
         )
         context = super().get_context_data(**kwargs)
 
@@ -28,7 +28,7 @@ class ConditionCreateView(CreateView):
         form.save()
 
         self.ConditionFormSet = inlineformset_factory(
-            Condition, InLineDescription, fields=("description",), extra=3
+            Condition, InLineDescription, fields=("description",), extra=1
         )
         formset = self.ConditionFormSet(
             self.request.POST, self.request.FILES, instance=form.instance
@@ -74,37 +74,6 @@ class ConditionUpdateView(UpdateView):
 class ConditioDetailView(DetailView):
     model = Condition
     template_name = "records/condition_detail.html"
-
-
-# class MedicineDelete(DeleteView):
-#     model = Condition
-#     template_name = "records/medicine_delete.html"
-#     success_url = reverse_lazy("patient_profile")
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#
-#         slug_field = self.get_slug_field()
-#         context["med"] = Condition.objects.filter(pk=self.kwargs.get(self.pk_url_kwarg)).filter(medicines__medicine=slug_field).values_list("medicines", flat=True)
-#         return context
-#
-#     def get_queryset(self):
-#         pk = self.kwargs.get(self.pk_url_kwarg)
-#         slug = self.kwargs.get("medicines")
-#
-#
-#         print(Condition.objects.filter(pk=self.kwargs.get(self.pk_url_kwarg)).filter(
-#             medicines__medicine=slug))
-#         return Condition.objects.filter(pk=self.kwargs.get(self.pk_url_kwarg)).filter(medicines__medicine=slug).values_list("medicines", flat=True).values("medicines")
-
-# def form_valid(self, form):
-#     pk = self.kwargs.get(self.pk_url_kwarg)
-#     import psycopg
-#     with psycopg.connect("dbname=med user=postgres password=ar138050") as conn:
-#         with conn.cursor() as cur:
-#             cur.execute("""
-#                 SELECT * FROM public.records_condition_medicines WHERE condition_id = %s and medicine_id = %s
-#             """, (pk, ))
 
 
 class MedicineDelete(DeleteView):
@@ -157,7 +126,7 @@ class MedicineDelete(DeleteView):
     def delete_func(self, con_pk, med_pk):
         from django.db import connection
 
-        with connection.cursor() as cur:  # ("dbname=med user=postgres password=ar138050") as conn:
+        with connection.cursor() as cur:
             cur.execute(
                 "DELETE "
                 "FROM public.records_condition_medicines "
@@ -180,3 +149,11 @@ class UserProfileListView(ListView):
 
     def get_queryset(self):
         return Condition.objects.filter(patient=self.request.user)
+
+
+class AllConditionListView(ListView):
+    model = Condition
+    template_name = "all-conditions/all_condition_list.html"
+
+    def get_queryset(self):
+        return Condition.all_conditions.all()

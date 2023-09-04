@@ -15,6 +15,11 @@ class Medicine(models.Model):
         return f"Medicine(medicine={self.medicine}, description={self.description if self.description else None})"
 
 
+class ConditionManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().values_list("condition", flat=True)
+
+
 class Condition(models.Model):
     patient = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="conditions"
@@ -24,6 +29,9 @@ class Condition(models.Model):
     medicines = models.ManyToManyField(
         Medicine, related_name="conditions", null=True, blank=True
     )
+
+    objects = models.Manager()
+    all_conditions = ConditionManager()
 
     def __str__(self):
         return self.condition
