@@ -1,3 +1,4 @@
+from autoslug import AutoSlugField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
@@ -8,9 +9,10 @@ class CustomUser(AbstractUser):
     name = models.CharField(_("Name of user"), max_length=255)
     email = models.EmailField(_("email address"), unique=True)
     age = models.PositiveSmallIntegerField(null=True, blank=True)
+    slug = AutoSlugField(populate_from="username", unique=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username", "age"]
 
     def get_absolute_url(self):
-        return reverse("users:user_detail", kwargs={"username": self.username})
+        return reverse("patient_records")

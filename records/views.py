@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -9,14 +10,18 @@ from .forms import ConditionForm
 from .models import Condition, InLineDescription, Medicine
 
 
-class ConditionCreateView(CreateView):
-    form_class = ConditionForm
+class ConditionCreateView(LoginRequiredMixin, CreateView):
     model = Condition
+    form_class = ConditionForm
     template_name = "records/condition_create.html"
 
     def get_context_data(self, **kwargs):
         ConditionFormSet = inlineformset_factory(
-            Condition, InLineDescription, fields=("description",), extra=1
+            Condition,
+            InLineDescription,
+            fields=("description",),
+            extra=1,
+            can_delete=False,
         )
         context = super().get_context_data(**kwargs)
 
@@ -25,10 +30,14 @@ class ConditionCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.patient = self.request.user
-        form.save()
+        self.object = form.save()
 
         self.ConditionFormSet = inlineformset_factory(
-            Condition, InLineDescription, fields=("description",), extra=1
+            Condition,
+            InLineDescription,
+            fields=("description",),
+            extra=1,
+            can_delete=False,
         )
         formset = self.ConditionFormSet(
             self.request.POST, self.request.FILES, instance=form.instance
@@ -38,16 +47,24 @@ class ConditionCreateView(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ConditionDeleteView(DeleteView):
+class ConditionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Condition
     template_name = "records/condition_delete.html"
     success_url = reverse_lazy("patient_profile")
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.patient == self.request.user
 
-class ConditionUpdateView(UpdateView):
+
+class ConditionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Condition
     fields = ("condition", "severity", "medicines")
     template_name = "records/condition_update.html"
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.patient == self.request.user
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -71,12 +88,16 @@ class ConditionUpdateView(UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ConditioDetailView(DetailView):
+class ConditioDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Condition
     template_name = "records/condition_detail.html"
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.patient == self.request.user
 
-class MedicineDelete(DeleteView):
+
+class MedicineDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Medicine
     template_name = "records/medicine_delete.html"
     success_url = reverse_lazy("patient_profile")
@@ -135,10 +156,14 @@ class MedicineDelete(DeleteView):
             )
         return True
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.patient == self.request.user
 
-class UserProfileListView(ListView):
+
+class UserRecordListView(LoginRequiredMixin, ListView):
     model = Condition
-    template_name = "records/user_profile_list.html"
+    template_name = "records/user_record_list.html"
     context_object_name = "conditions"
 
     def get_context_data(self, *, object_list=None, **kwargs):

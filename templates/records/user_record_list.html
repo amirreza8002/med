@@ -5,8 +5,9 @@
 {% block content %}
 	<h2>your profile</h2>
     <div class="article-entry">
-      <span class="text-muted" style="text-decoration: none">name: {{ patient.username }}</span> &middot;
+      <span class="text-muted" style="text-decoration: none">name: {{ patient.name }}</span> &middot;
       <span class="text-muted">age: {{ patient.age }}</span>
+      <p><small><a class="link-dark" href="{% url 'user_update' patient.username %}">update your data</a> </small></p>
     </div>
 
 

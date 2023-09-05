@@ -7,5 +7,5 @@ from . import views
 urlpatterns = [
     path("", include("allauth.urls")),
     path("loggedout/", views.LoggedOut.as_view(), name="logged_out"),
-    path("user/<str:username>/", views.UserDetailView.as_view(), name="user_detail"),
+    path("user/<slug:slug>/", views.UserInfoUpdateView.as_view(), name="user_update"),
 ]

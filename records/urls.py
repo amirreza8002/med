@@ -1,14 +1,14 @@
 from django.urls import path
 
-from .views import (ConditioDetailView, ConditionCreateView,
-                    ConditionDeleteView, ConditionUpdateView, MedicineDelete,
-                    UserProfileListView, AllConditionListView)
+from .views import (AllConditionListView, ConditioDetailView,
+                    ConditionCreateView, ConditionDeleteView,
+                    ConditionUpdateView, MedicineDelete, UserRecordListView)
 
 # app_name = "records"
 
 urlpatterns = [
     path("condition/create/", ConditionCreateView.as_view(), name="condition_create"),
-    path("patient/profile/", UserProfileListView.as_view(), name="patient_profile"),
+    path("patient/profile/", UserRecordListView.as_view(), name="patient_records"),
     path(
         "condition/detail/<int:pk>/",
         ConditioDetailView.as_view(),

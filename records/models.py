@@ -37,10 +37,12 @@ class Condition(models.Model):
         return self.condition
 
     def __repr__(self):
-        return (f"Condition(condition={self.condition}, "
-                f"severity={self.severity if self.severity else None}, "
-                f"medicine={self.medicines if self.medicines else None}, "
-                f"descriptions={[desc for desc in self.descriptions.all()] if self.descriptions else None})")
+        return (
+            f"Condition(condition={self.condition}, "
+            f"severity={self.severity if self.severity else None}, "
+            f"medicine={self.medicines if self.medicines else None}, "
+            f"descriptions={[desc for desc in self.descriptions.all()] if self.descriptions else None})"
+        )
 
     def get_absolute_url(self):
         return reverse("condition_detail", args=[str(self.id)])
