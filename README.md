@@ -1,13 +1,13 @@
 ## medical records
 
 ### for now:
-#### user registery
-#### user detail page to show their info
-#### a page to add conditions
-#### a page to edit conditions
-#### delete conditions
+#### test
 
-### maybe:
+
 #### doctor info
 #### condition info
 #### medicine info
+
+### doctor info:
+#### a field on condition or a many to many?
+#### if many to many, it should be a role on user model

@@ -7,3 +7,4 @@ crispy-bootstrap5
 django-debug-toolbar
 black
 django-autoslug
+pytest-django

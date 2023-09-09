@@ -7,3 +7,7 @@ class HomePage(TemplateView):
 
 class AboutPage(TemplateView):
     template_name = "about.html"
+
+
+class RobotsPage(TemplateView):
+    template_name = "robots.txt"
