@@ -70,7 +70,7 @@ class ConditionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         form = self.get_form()
         ConditionFormSet = inlineformset_factory(
-            Condition, InLineDescription, fields=("description",), extra=0
+            Condition, InLineDescription, fields=("description",), extra=1
         )
         context["descriptions"] = ConditionFormSet(instance=form.instance)
         return context
