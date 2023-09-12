@@ -31,7 +31,7 @@ class TestUserInfoView(TestCase):
 
         assert response.template_name[0] == "account/user_update.html"
 
-    def test_forbbiden_whhen_entering_another_users_page(self):
+    def test_forbbiden_when_entering_another_users_page(self):
         self.client.login(email="amir@email.com", password="testpass123")
         response = self.client.get(reverse("user_update", args=[str("reza")]))
         assert response.status_code == 403
