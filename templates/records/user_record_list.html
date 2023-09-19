@@ -15,7 +15,7 @@
   {% for condition in conditions %}
     <div class="card">
       <div class="card-header">
-  	  <p class="font-weight-bold"><a class="link-dark" style="text-decoration: none" href="{{ condition.get_absolute_url }}">{{ condition.condition }}</a></p>
+  	  <p class="font-weight-bold"><a class="link-dark" style="text-decoration: none" href="{{ condition.get_absolute_url }}">{{ condition.conditions.condition }}</a></p>
       </div>
       <div class="card-body">
       {% if condition.severity %}

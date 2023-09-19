@@ -7,7 +7,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
 from .forms import ConditionForm
-from .models import Condition, InLineDescription, Medicine
+from .models import Condition, ConditionInfo, InLineDescription, Medicine
 
 
 class ConditionCreateView(LoginRequiredMixin, CreateView):
@@ -50,7 +50,7 @@ class ConditionCreateView(LoginRequiredMixin, CreateView):
 class ConditionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Condition
     template_name = "records/condition_delete.html"
-    success_url = reverse_lazy("patient_profile")
+    success_url = reverse_lazy("patient_records")
 
     def test_func(self):
         obj = self.get_object()
@@ -59,7 +59,7 @@ class ConditionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class ConditionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Condition
-    fields = ("condition", "severity", "medicines")
+    fields = ("conditions", "severity", "medicines")
     template_name = "records/condition_update.html"
 
     def test_func(self):
@@ -100,7 +100,7 @@ class ConditioDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 class MedicineDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Medicine
     template_name = "records/medicine_delete.html"
-    success_url = reverse_lazy("patient_profile")
+    success_url = reverse_lazy("patient_records")
 
     def form_valid(self, form):
         con_pk = self.kwargs.get("con_pk")
@@ -177,8 +177,8 @@ class UserRecordListView(LoginRequiredMixin, ListView):
 
 
 class AllConditionListView(ListView):
-    model = Condition
+    model = ConditionInfo
     template_name = "all-conditions/all_condition_list.html"
 
     def get_queryset(self):
-        return Condition.all_conditions.all()
+        return ConditionInfo.objects.all()

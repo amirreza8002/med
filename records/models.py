@@ -20,11 +20,27 @@ class ConditionManager(models.Manager):
         return super().get_queryset().values_list("condition", flat=True)
 
 
+class ConditionInfo(models.Model):
+    condition = models.CharField(_("name of the condition"), max_length=255)
+    info = models.TextField(null=True, blank=True)
+
+    objects = models.Manager()
+    all_conditions = ConditionManager()
+
+    def __str__(self):
+        return self.condition
+
+    def __repr__(self):
+        return f"ConditionInfo(condition={self.condition}, info={self.info})"
+
+
 class Condition(models.Model):
     patient = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="conditions"
     )
-    condition = models.CharField(_("name of the condition"), max_length=255)
+    conditions = models.ForeignKey(
+        ConditionInfo, on_delete=models.CASCADE, related_name="conditions"
+    )
     severity = models.CharField(max_length=100, blank=True, null=True)
     medicines = models.ManyToManyField(
         Medicine, related_name="conditions", null=True, blank=True
@@ -34,11 +50,11 @@ class Condition(models.Model):
     all_conditions = ConditionManager()
 
     def __str__(self):
-        return self.condition
+        return self.conditions.condition
 
     def __repr__(self):
         return (
-            f"Condition(condition={self.condition}, "
+            f"Condition(condition={self.conditions.condition}, "
             f"severity={self.severity if self.severity else None}, "
             f"medicine={self.medicines if self.medicines else None}, "
             f"descriptions={[desc for desc in self.descriptions.all()] if self.descriptions else None})"
@@ -55,4 +71,4 @@ class InLineDescription(models.Model):
     )
 
     def __repr__(self):
-        return f"InLineDescription(description={self.description}, condition={self.condition})"
+        return f"InLineDescription(description={self.description}, condition={self.condition.condition})"

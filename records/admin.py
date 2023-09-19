@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Condition, InLineDescription, Medicine
+from .models import Condition, ConditionInfo, InLineDescription, Medicine
 
 
 class DescriptionInLine(admin.TabularInline):
@@ -15,4 +15,9 @@ class ConditionAdmin(admin.ModelAdmin):
 
 @admin.register(Medicine)
 class MedicineAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ConditionInfo)
+class ConditionInfoAdmin(admin.ModelAdmin):
     pass
