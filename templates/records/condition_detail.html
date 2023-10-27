@@ -5,6 +5,7 @@
 {% block content %}
   <div class="condition-detail">
 	<h3>{{ condition.conditions.condition }}</h3>
+  <p><small><a href="{{ condition.conditions.get_absolute_url }}">see more info about this condition</a></small></p>
 
   {% if condition.severity %}
     <p>severity: {{ condition.severity }}</p>

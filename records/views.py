@@ -88,7 +88,7 @@ class ConditionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ConditioDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+class ConditionDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Condition
     template_name = "records/condition_detail.html"
 
@@ -182,3 +182,8 @@ class AllConditionListView(ListView):
 
     def get_queryset(self):
         return ConditionInfo.objects.all()
+
+
+class ConditionInfoDetail(DetailView):
+    model = ConditionInfo
+    template_name = "all-conditions/condition_info.html"

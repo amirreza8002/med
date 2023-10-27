@@ -8,7 +8,7 @@
   {% for condition in conditioninfo_list %}
     <div class="card">
       <div class="card-header">
-  	  <p class="font-weight-bold"><a class="link-dark" style="text-decoration: none" href="#">{{ condition }}</a></p>
+  	  <p class="font-weight-bold"><a class="link-dark" style="text-decoration: none" href="{{ condition.get_absolute_url }}">{{ condition }}</a></p>
       </div>
     </div>
   {% endfor %}

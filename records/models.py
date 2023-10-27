@@ -33,6 +33,9 @@ class ConditionInfo(models.Model):
     def __repr__(self):
         return f"ConditionInfo(condition={self.condition}, info={self.info})"
 
+    def get_absolute_url(self):
+        return reverse("condition_info", args=[str(self.condition)])
+
 
 class Condition(models.Model):
     patient = models.ForeignKey(

@@ -8,3 +8,4 @@ django-debug-toolbar
 black
 django-autoslug
 pytest-django
+coverage

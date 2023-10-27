@@ -1,8 +1,8 @@
 from django.urls import path
 
-from .views import (AllConditionListView, ConditioDetailView,
+from .views import (AllConditionListView, ConditionDetailView,
                     ConditionCreateView, ConditionDeleteView,
-                    ConditionUpdateView, MedicineDelete, UserRecordListView)
+                    ConditionUpdateView, MedicineDelete, UserRecordListView, ConditionInfoDetail)
 
 # app_name = "records"
 
@@ -11,7 +11,7 @@ urlpatterns = [
     path("patient/profile/", UserRecordListView.as_view(), name="patient_records"),
     path(
         "condition/detail/<int:pk>/",
-        ConditioDetailView.as_view(),
+        ConditionDetailView.as_view(),
         name="condition_detail",
     ),
     path(
@@ -30,4 +30,5 @@ urlpatterns = [
         name="medicine_delete",
     ),
     path("conditions/list/", AllConditionListView.as_view(), name="all_conditions"),
+    path("condition/<slug:condition>/info/", ConditionInfoDetail.as_view(), name="condition_info"),
 ]

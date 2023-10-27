@@ -2,3 +2,5 @@
 __pycache__/
 .idea
 .ruff_cache
+.pytest_cache
+.coverage

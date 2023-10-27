@@ -1,0 +1,14 @@
+{% extends '_base.html' %}
+
+{% block title %}{{ conditioninfo.condition }}{% endblock %}
+
+{% block content %}
+  <h1>{{ conditioninfo.condition }}</h1>
+  {% if conditioninfo.info %}
+  	<p>{{ conditioninfo.info }}</p>
+  {% else %}
+    <p>no data provided for this condition</p>
+    <small><a href="#">share some information?</a></small>
+  {% endif %}
+
+{% endblock %}

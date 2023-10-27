@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from records.models import Condition, Medicine
+from records.models import Condition, Medicine, ConditionInfo
 
 
 class TestConditionCreateView(TestCase):
@@ -39,7 +39,7 @@ class TestConditionCreateView(TestCase):
             reverse(
                 "condition_create",
             ),
-            {"condition": "headache", "severity": "low", "descriptions": "regular"},
+            {"conditions": "headache", "severity": "low", "descriptions": "regular"},
         )
 
         assert respone.status_code == 302
@@ -59,9 +59,13 @@ class TestConditionDetailView(TestCase):
             password="testpass123",
         )
 
+        cls.condition_info = ConditionInfo.objects.create(
+            condition="cold"
+        )
+
         cls.condition = Condition.objects.create(
             patient=cls.user,
-            condition="cold",
+            conditions=cls.condition_info,
             severity="mild",
         )
 
