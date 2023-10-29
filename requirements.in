@@ -9,3 +9,5 @@ black
 django-autoslug
 pytest-django
 coverage
+ruff
+pip-tools
