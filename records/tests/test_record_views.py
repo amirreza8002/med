@@ -59,9 +59,7 @@ class TestConditionDetailView(TestCase):
             password="testpass123",
         )
 
-        cls.condition_info = ConditionInfo.objects.create(
-            condition="cold"
-        )
+        cls.condition_info = ConditionInfo.objects.create(condition="cold")
 
         cls.condition = Condition.objects.create(
             patient=cls.user,

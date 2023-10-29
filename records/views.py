@@ -3,8 +3,13 @@ from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
 from .forms import ConditionForm
 from .models import Condition, ConditionInfo, InLineDescription, Medicine
@@ -15,30 +20,26 @@ class ConditionCreateView(LoginRequiredMixin, CreateView):
     form_class = ConditionForm
     template_name = "records/condition_create.html"
 
-    def get_context_data(self, **kwargs):
-        ConditionFormSet = inlineformset_factory(
+    def __init__(self) -> None:
+        super().__init__()
+        self.ConditionFormSet = inlineformset_factory(
             Condition,
             InLineDescription,
             fields=("description",),
-            extra=1,
+            extra=3,
             can_delete=False,
         )
+
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["descriptions"] = ConditionFormSet()
+        context["descriptions"] = self.ConditionFormSet()
         return context
 
     def form_valid(self, form):
         form.instance.patient = self.request.user
         self.object = form.save()
 
-        self.ConditionFormSet = inlineformset_factory(
-            Condition,
-            InLineDescription,
-            fields=("description",),
-            extra=1,
-            can_delete=False,
-        )
         formset = self.ConditionFormSet(
             self.request.POST, self.request.FILES, instance=form.instance
         )
