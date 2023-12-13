@@ -1,12 +1,16 @@
 # medical records
 
 ### for now:
+
+### many to many form
+#### need to add a view so the form would open and make new data
+#### need a way to return that data to the original form
+
+
+
 #### test
 
-## condition info
-### how to implement?
- need to add a ForeignKey to Condition model to a new model that contains info
- need to add a detail view to show the info
+
 ### need to add a form to report problems with the info
  info will be available to all
 

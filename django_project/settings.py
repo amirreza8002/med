@@ -60,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
@@ -159,11 +160,11 @@ LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "logged_out"
 
 # allauth settings
-# SITE_ID = 1
-# AUTHENTICATION_BACKENDS = [
-#     "django.contrib.auth.backends.ModelBackend",
-#     "allauth.account.auth_backends.AuthenticationBackend",
-# ]
+SITE_ID = 1
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
 
 
 # ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False

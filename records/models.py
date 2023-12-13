@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Medicine(models.Model):
-    medicine = models.CharField(max_length=150)
+    medicine = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -21,7 +21,7 @@ class ConditionManager(models.Manager):
 
 
 class ConditionInfo(models.Model):
-    condition = models.CharField(_("name of the condition"), max_length=255)
+    condition = models.CharField(max_length=255)
     info = models.TextField(null=True, blank=True)
 
     objects = models.Manager()
@@ -39,27 +39,26 @@ class ConditionInfo(models.Model):
 
 class Condition(models.Model):
     patient = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="conditions"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
     )
     conditions = models.ForeignKey(
-        ConditionInfo, on_delete=models.CASCADE, related_name="conditions"
+        ConditionInfo, on_delete=models.CASCADE, related_name="condition_info"
     )
     severity = models.CharField(max_length=100, blank=True, null=True)
-    medicines = models.ManyToManyField(
-        Medicine, related_name="conditions", null=True, blank=True
-    )
+    medicine = models.ManyToManyField(Medicine)
 
     objects = models.Manager()
     all_conditions = ConditionManager()
 
     def __str__(self):
-        return self.conditions.condition
+        return self.conditions
 
     def __repr__(self):
         return (
-            f"Condition(condition={self.conditions.condition}, "
+            f"Condition(condition={self.conditions}, "
             f"severity={self.severity if self.severity else None}, "
-            f"medicine={self.medicines if self.medicines else None}, "
+            f"medicine={self.medicine if self.medicine else None}, "
             f"descriptions={[desc for desc in self.descriptions.all()] if self.descriptions else None})"
         )
 

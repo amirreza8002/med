@@ -1,7 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db import connection
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.shortcuts import render
+from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext as _
 from django.views.generic import (
     CreateView,
@@ -11,10 +13,76 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .forms import ConditionForm
+from .forms import ConditionForm, MedicineForm, ConditionInfoForm
 from .models import Condition, ConditionInfo, InLineDescription, Medicine
 
 
+def condition_create_view(request):
+    form_class = ConditionForm
+    sec_form_class = MedicineForm
+    template_name = "records/condition_create.html"
+    context = {}
+
+    condition_form_set = inlineformset_factory(
+        Condition, InLineDescription, fields=("description",), extra=3, can_delete=False
+    )
+    if request.method == "GET":
+        context["descriptions"] = condition_form_set()
+        context["form"] = form_class
+        context["sec_form"] = sec_form_class
+        return render(request, template_name, context)
+
+    if request.method == "POST":
+        form = ConditionForm(request.POST)
+        sec_form = MedicineForm(request.POST)
+        formset = condition_form_set(
+            request.POST, request.FILES, instance=form.instance
+        )
+        if form.is_valid():
+            form.instance.patient = request.user
+            form.save()
+
+        # operations for the medicine table
+        if sec_form.is_valid():
+            condition = Condition.objects.get(pk=form.instance.id)
+
+            with connection.cursor() as cur:
+                # check if medicine already exists in the database (many to many)
+                cur.execute(
+                    "SELECT id FROM records_medicine WHERE LOWER(medicine) = LOWER(%s)",
+                    (sec_form.cleaned_data["medicine"],),
+                )
+                medicine_id = cur.fetchone()
+                if medicine_id:
+                    # if medicine already exists just create one row in the middle table
+                    cur.execute(
+                        "INSERT INTO records_condition_medicine(condition_id, medicine_id) VALUES (%s, %s)",
+                        (condition.id, medicine_id[0]),
+                    )
+                else:
+                    # if medicine is new, create a new one
+                    cur.execute(
+                        "INSERT INTO records_medicine(medicine) VALUES (%s)",
+                        (sec_form.cleaned_data["medicine"],),
+                    )
+                    cur.execute(
+                        "SELECT id FROM records_medicine WHERE medicine = %s",
+                        (sec_form.cleaned_data["medicine"],),
+                    )
+                    medicine_id = cur.fetchone()
+                    cur.execute(
+                        "INSERT INTO records_condition_medicine(condition_id, medicine_id) VALUES (%s, %s)",
+                        (condition.id, medicine_id[0]),
+                    )
+
+        # save the inline formset data
+        if formset.is_valid():
+            formset.save()
+
+        return HttpResponseRedirect(Condition.get_absolute_url(form.instance))
+
+
+"""
 class ConditionCreateView(LoginRequiredMixin, CreateView):
     model = Condition
     form_class = ConditionForm
@@ -29,6 +97,7 @@ class ConditionCreateView(LoginRequiredMixin, CreateView):
             extra=3,
             can_delete=False,
         )
+        self.get_form()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -46,6 +115,7 @@ class ConditionCreateView(LoginRequiredMixin, CreateView):
         formset.save()
 
         return HttpResponseRedirect(self.get_success_url())
+"""
 
 
 class ConditionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -106,11 +176,7 @@ class MedicineDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def form_valid(self, form):
         con_pk = self.kwargs.get("con_pk")
         slug = self.kwargs.get("medicine")
-        print(
-            Medicine.objects.filter(medicine=slug)
-            .filter(conditions__id=con_pk)
-            .values()
-        )
+
         med_pk = (
             Medicine.objects.filter(medicine=slug)
             .filter(conditions__id=con_pk)
@@ -146,8 +212,6 @@ class MedicineDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return obj
 
     def delete_func(self, con_pk, med_pk):
-        from django.db import connection
-
         with connection.cursor() as cur:
             cur.execute(
                 "DELETE "
@@ -188,3 +252,14 @@ class AllConditionListView(ListView):
 class ConditionInfoDetail(DetailView):
     model = ConditionInfo
     template_name = "all-conditions/condition_info.html"
+
+
+class MedicineCreateForm(CreateView):
+    model = Medicine
+    form_class = MedicineForm
+    success_url = reverse_lazy("home")
+
+
+class ConditionInfoCreateForm(CreateView):
+    model = ConditionInfo
+    form_class = ConditionInfoForm

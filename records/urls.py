@@ -3,18 +3,20 @@ from django.urls import path
 from .views import (
     AllConditionListView,
     ConditionDetailView,
-    ConditionCreateView,
+    condition_create_view,
     ConditionDeleteView,
     ConditionUpdateView,
     MedicineDelete,
     UserRecordListView,
     ConditionInfoDetail,
+    ConditionInfoCreateForm,
+    MedicineCreateForm,
 )
 
 # app_name = "records"
 
 urlpatterns = [
-    path("condition/create/", ConditionCreateView.as_view(), name="condition_create"),
+    path("condition/create/", condition_create_view, name="condition_create"),
     path("patient/profile/", UserRecordListView.as_view(), name="patient_records"),
     path(
         "condition/detail/<int:pk>/",
@@ -41,5 +43,15 @@ urlpatterns = [
         "condition/<slug:condition>/info/",
         ConditionInfoDetail.as_view(),
         name="condition_info",
+    ),
+    path(
+        "condition/create/condition/",
+        ConditionInfoCreateForm.as_view(),
+        name="condition_info_create",
+    ),
+    path(
+        "condition/create/medicine/",
+        MedicineCreateForm.as_view(),
+        name="medicine_create",
     ),
 ]

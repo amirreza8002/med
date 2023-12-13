@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block title %}New condition{% endblock %}
 
@@ -8,8 +9,8 @@
 
   <form method="post" action="">{% csrf_token %}
     {{ form|crispy }}
-
+    {{ sec_form|crispy }}
     {{ descriptions|crispy }}
-    <button class="btn btn-success ml-2" type="submit" style="margin-top: 65px; padding: 5px 35px 5px 35px">Save</button>
+    <button class="btn btn-success ml-2" type="submit" style="margin-top: 65px; margin-bottom: auto; padding: 5px 35px 5px 35px">Save</button>
   </form>
 {% endblock %}
