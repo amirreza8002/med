@@ -34,7 +34,7 @@ class ConditionInfo(models.Model):
         return f"ConditionInfo(condition={self.condition}, info={self.info})"
 
     def get_absolute_url(self):
-        return reverse("condition_info", args=[str(self.condition)])
+        return reverse("condition_info", args=[str(self.id)])
 
 
 class Condition(models.Model):
@@ -47,12 +47,13 @@ class Condition(models.Model):
     )
     severity = models.CharField(max_length=100, blank=True, null=True)
     medicine = models.ManyToManyField(Medicine)
+    MRI = models.ImageField(verbose_name=_("MRI image"), null=True, blank=True, max_length=255)
 
     objects = models.Manager()
     all_conditions = ConditionManager()
 
     def __str__(self):
-        return self.conditions
+        return self.conditions.condition
 
     def __repr__(self):
         return (

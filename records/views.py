@@ -130,7 +130,7 @@ class ConditionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class ConditionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Condition
-    fields = ("conditions", "severity", "medicines")
+    fields = ("conditions", "severity", "medicine", "MRI")
     template_name = "records/condition_update.html"
 
     def test_func(self):

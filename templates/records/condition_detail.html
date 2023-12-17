@@ -12,13 +12,18 @@
   {% endif %}
 
   <p>Medication:</p>
-  {% if condition.medicines.exists %}
-    {% for med in condition.medicines.all %}
+  {% if condition.medicine.exists %}
+    {% for med in condition.medicine.all %}
     	<p>{{ med }} <small><a href="{% url 'medicine_delete' condition.pk med %}">Delete this medicine?</a></small></p>
     {% endfor %}
   {% else %}
     <p>No medication for this condition</p>
   {% endif %}
+  
+  {% if condition.MRI %}
+    <img src="{{ condition.MRI.url }}">
+  {% endif %}
+  
   <div>
   {% if condition.descriptions %}
     <p>Descriptions:</p>

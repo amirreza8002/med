@@ -40,7 +40,7 @@ urlpatterns = [
     ),
     path("conditions/list/", AllConditionListView.as_view(), name="all_conditions"),
     path(
-        "condition/<slug:condition>/info/",
+        "condition/<int:pk>/info/",
         ConditionInfoDetail.as_view(),
         name="condition_info",
     ),

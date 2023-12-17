@@ -1,3 +1,9 @@
-## work in progress
+## TODOS:
 
-## prblem with integrating database with a form
+## add tests
+## user panel
+## doctor panel
+## all medicine page
+## conditions page
+## add support for uploading images (e.g. MRI)
+## argon2 hashing

@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     slug = AutoSlugField(populate_from="username", unique=True)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "age"]
+    REQUIRED_FIELDS = ("username",)
 
     def get_absolute_url(self):
         return reverse("patient_records")
