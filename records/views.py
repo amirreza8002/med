@@ -13,13 +13,14 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .forms import ConditionForm, MedicineForm, ConditionInfoForm
+from .forms import ConditionForm, MedicineForm, ConditionInfoForm, ConditionInputForm
 from .models import Condition, ConditionInfo, InLineDescription, Medicine
 
 
 def condition_create_view(request):
     form_class = ConditionForm
     sec_form_class = MedicineForm
+    third_form_class = ConditionInputForm
     template_name = "records/condition_create.html"
     context = {}
 
@@ -30,14 +31,17 @@ def condition_create_view(request):
         context["descriptions"] = condition_form_set()
         context["form"] = form_class
         context["sec_form"] = sec_form_class
+        context["third_form"] = third_form_class
         return render(request, template_name, context)
 
     if request.method == "POST":
         form = ConditionForm(request.POST)
         sec_form = MedicineForm(request.POST)
+        third_form = ConditionInputForm(request.POST)
         formset = condition_form_set(
             request.POST, request.FILES, instance=form.instance
         )
+
         if form.is_valid():
             form.instance.patient = request.user
             form.save()
@@ -74,6 +78,10 @@ def condition_create_view(request):
                         "INSERT INTO records_condition_medicine(condition_id, medicine_id) VALUES (%s, %s)",
                         (condition.id, medicine_id[0]),
                     )
+
+        if third_form.is_valid():
+            condition = Condition.objects.get(pk=form.instance.id)
+            # TODO: add the rest of the code
 
         # save the inline formset data
         if formset.is_valid():

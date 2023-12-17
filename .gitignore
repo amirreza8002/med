@@ -5,4 +5,4 @@ __pycache__/
 .pytest_cache
 .coverage
 med
-DO-NOT_COMMIT.txt
+DO-NOT-COMMIT.txt

@@ -8,6 +8,7 @@
 	<h2>New condition</h2>
 
   <form method="post" action="">{% csrf_token %}
+    {{ third_form|crispy }}
     {{ form|crispy }}
     {{ sec_form|crispy }}
     {{ descriptions|crispy }}

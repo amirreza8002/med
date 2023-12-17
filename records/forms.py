@@ -7,7 +7,13 @@ class ConditionForm(ModelForm):
     class Meta:
         model = Condition
         exclude = ("patient", "medicine")
-        widgets = {"medicine": TextInput()}
+        widgets = {"medicine": TextInput(), "conditions": TextInput()}
+
+
+class ConditionInputForm(ModelForm):
+    class Meta:
+        model = ConditionInfo
+        fields = ("condition",)
 
 
 class MedicineForm(ModelForm):
